@@ -15,8 +15,11 @@
 
       <!-- Event list -->
       <div v-else class="flex flex-col gap-10">
-        <div v-for="event in events" :key="event.event_id"
-          class="bg-white dark:bg-gray-800 shadow-md rounded-xl transition-shadow duration-200 hover:shadow-lg p-4 sm:p-6 space-y-6">
+        <div
+          v-for="event in events"
+          :key="event.event_id"
+          class="bg-white dark:bg-gray-800 shadow-md rounded-xl transition-shadow duration-200 hover:shadow-lg p-4 sm:p-6 space-y-6"
+        >
           <div class="p-4 sm:p-6">
             <img
               :src="event.cover_image_url"
@@ -25,26 +28,36 @@
               loading="lazy"
               @click="goToDetail(event.event_id)"
             />
-            <h2 class="text-2xl font-bold mb-2 text-indigo-700 dark:text-indigo-300 cursor-pointer"
-                @click="goToDetail(event.event_id)">
+            <h2
+              class="text-2xl font-bold mb-2 text-indigo-700 dark:text-indigo-300 cursor-pointer"
+              @click="goToDetail(event.event_id)"
+            >
               {{ event.ten_events }}
             </h2>
-            <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-4 cursor-pointer" @click="goToDetail(event.id)">
+            <p
+              class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-4 cursor-pointer"
+              @click="goToDetail(event.event_id)"
+            >
               {{ event.description }}
             </p>
-            <span class="text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
-                  @click="goToDetail(event.event_id)">
+            <span
+              class="text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+              @click="goToDetail(event.event_id)"
+            >
               More Details
             </span>
           </div>
+
           <hr class="border-t border-gray-300 dark:border-gray-600 my-4" />
+
+          <!-- Event Card -->
           <Event1Card
             :id="event.event_id"
             :day="getDay(event.starts_at)"
             :month="getMonth(event.starts_at)"
             :title="event.ten_events"
             :time="formatDateRange(event.starts_at, event.ends_at)"
-            :price="event.price"
+            :price="formatPrice(event.price)"
             :location="event.in_person_location"
             :mapUrl="event.location_URL"
             :mapImage="event.cover_image_url"
@@ -62,7 +75,8 @@
 
 <script>
 import Event1Card from '../components/Event1Card.vue';
-// import Event1List if needed
+
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export default {
   name: 'ComEvent',
@@ -77,16 +91,15 @@ export default {
     };
   },
   created() {
-    this.fetchEventData(); // Bắt đầu tải sớm hơn
+    this.fetchEventData();
   },
   methods: {
     async fetchEventData() {
       try {
-        const response = await fetch('https://be-legion.onrender.com/api/events');
+        const response = await fetch(`${BASE_URL}/events`);
         if (!response.ok) throw new Error('Không thể tải dữ liệu sự kiện.');
         const data = await response.json();
-        this.events = Array.isArray(data.data) ? data.data : []; // dòng đúng
-
+        this.events = Array.isArray(data.data) ? data.data : [];
       } catch (err) {
         this.error = err.message;
       } finally {
@@ -94,7 +107,20 @@ export default {
       }
     },
     formatDateRange(start, end) {
-      return `${start} → ${end}`;
+      const s = new Date(start).toLocaleString('vi-VN', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      });
+      const e = new Date(end).toLocaleString('vi-VN', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      });
+      return `${s} → ${e}`;
+    },
+    formatPrice(price) {
+      if (!price || price.toLowerCase().includes('miễn phí')) return 'Miễn phí';
+      const numeric = price.replace(/[^\d]/g, '');
+      return Number(numeric).toLocaleString('vi-VN') + '₫';
     },
     getDay(dateStr) {
       return new Date(dateStr).getDate();

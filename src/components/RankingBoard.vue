@@ -128,20 +128,22 @@ const error = ref(null);
 // Giả lập user hiện tại
 const currentUserID = 1;
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 onMounted(async () => {
   try {
-    const response = await fetch('https://virtserver.swaggerhub.com/404-Found/API_USER/1.0.0/api/users/alluser');
+    const response = await fetch(`${API_BASE_URL}/api/users/alluser`);
     if (!response.ok) throw new Error('Không thể tải dữ liệu.');
     const result = await response.json();
-    
-      if (result.data) {
-    rankingData.value = result.data.map(user => ({
-      memberID: user.community_member_id,
-      name: user.ten_community_members || `${user.first_name} ${user.last_name}`.trim(),
-      avtURL: user.avatar_url && user.avatar_url !== 'string' ? user.avatar_url : 'https://i.pravatar.cc/300',
-      level: parseInt(user.current_level_name.replace('Level ', '')) || 1,
-      points: user.total_points,
-      pointsToNextLevel: user.points_to_next_level
+
+    if (result.data) {
+      rankingData.value = result.data.map(user => ({
+        memberID: user.community_member_id,
+        name: user.ten_community_members || `${user.first_name} ${user.last_name}`.trim(),
+        avtURL: user.avatar_url && user.avatar_url !== 'string' ? user.avatar_url : 'https://i.pravatar.cc/300',
+        level: parseInt(user.current_level_name.replace('Level ', '')) || 1,
+        points: user.total_points,
+        pointsToNextLevel: user.points_to_next_level
       }));
     }
     loading.value = false;
@@ -151,6 +153,7 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
 
 const sortedRankingData = computed(() =>
   [...rankingData.value].sort((a, b) => b.points - a.points)
