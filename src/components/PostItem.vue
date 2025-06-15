@@ -58,19 +58,6 @@
           {{ post.excerpt }}
         </p>
 
-        <!-- Tác giả và ngày -->
-        <div class="author-date flex items-center mb-4">
-          <div
-            class="author-avatar w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden mr-3 border-2 border-white shadow-md">
-            <img :src="post.authorAvatar || 'https://i.pravatar.cc/150?img=3'" alt="Author avatar"
-              class="w-full h-full object-cover" />
-          </div>
-          <div>
-            <div class="author-name font-medium text-gray-900">{{ post.author }}</div>
-            <div class="post-date text-xs text-gray-500">{{ formatDate(post.createdAt) }}</div>
-          </div>
-        </div>
-
         <!-- Tags -->
         <div class="tags flex flex-wrap gap-2 mb-4">
           <span v-for="(tag, index) in post.tags" :key="index"
