@@ -99,18 +99,18 @@ export default {
 
   try {
     // Lấy token trước
-    const tokenResponse = await fetch(`${baseURL}/api/token/gettoken`);
-    if (!tokenResponse.ok) {
-      throw new Error('Không thể lấy token');
-    }
-    const token = tokenResponse.headers.get('Authorization');
+    // const tokenResponse = await fetch(`${baseURL}/api/token/gettoken`);
+    // if (!tokenResponse.ok) {
+    //   throw new Error('Không thể lấy token');
+    // }
+    // const token = tokenResponse.headers.get('Authorization');
 
     // Gọi API với token
-    const response = await fetch(`${baseURL}/api/users/${userID}`, {
+    const response = await fetch(`${baseURL}/api/users/${userID}`/*, {
       headers: {
         'Authorization': token
       }
-    });
+    }*/);
     if (!response.ok) {
       throw new Error(`HTTP error! Status : ${response.status}`);
     }
