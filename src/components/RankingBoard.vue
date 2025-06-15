@@ -34,16 +34,7 @@
               >
                 <td class="border border-gray-200 p-3 sm:p-4">
                   <div
-                    :class="[
-                      'rounded-full w-8 sm:w-9 h-8 sm:h-9 flex items-center justify-center mx-auto text-sm font-bold',
-                      index === 0
-                        ? 'bg-red-600 text-white'
-                        : index === 1
-                        ? 'bg-black text-white'
-                        : index === 2
-                        ? 'bg-red-500 text-white'
-                        : 'bg-gray-100 text-gray-900'
-                    ]"
+                    class="rounded-full w-8 sm:w-9 h-8 sm:h-9 flex items-center justify-center mx-auto text-sm font-bold text-gray-900"
                   >
                     {{ index + 1 }}
                   </div>
@@ -133,17 +124,17 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 onMounted(async () => {
   try {
     // Lấy token trước
-    const tokenResponse = await fetch(`${API_BASE_URL}/api/token/gettoken`);
-    if (!tokenResponse.ok) throw new Error('Không thể lấy token');
-    const tokenData = await tokenResponse.json();
-    const token = tokenResponse.headers.get('Authorization');
+    // const tokenResponse = await fetch(`${API_BASE_URL}/api/token/gettoken`);
+    // if (!tokenResponse.ok) throw new Error('Không thể lấy token');
+    // const tokenData = await tokenResponse.json();
+    // const token = tokenResponse.headers.get('Authorization');
 
     // Gọi API với token
-    const response = await fetch(`${API_BASE_URL}/api/users/alluser`, {
+    const response = await fetch(`${API_BASE_URL}/api/users/alluser`/*, {
       headers: {
         'Authorization': token
       }
-    });
+    }*/);
     if (!response.ok) throw new Error('Không thể tải dữ liệu.');
     const result = await response.json();
 
