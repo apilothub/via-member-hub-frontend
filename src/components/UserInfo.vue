@@ -70,7 +70,7 @@ export default {
       user: {
         memberID: '',
         name: 'Unknown',
-        avtURL: 'https://i.pravatar.cc/300',
+        avtURL: 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg',
         createdAt: '',
         location: '',
         headline: 'No headline available',
@@ -90,7 +90,7 @@ export default {
       });
     },
     handleImageError(event) {
-      event.target.src = 'https://i.pravatar.cc/300';
+      event.target.src = 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg';
     }
   },
   async created() {
@@ -125,7 +125,7 @@ export default {
     this.user = {
       memberID: data.community_member_id || '',
       name: `${data.first_name || ''} ${data.last_name || ''}`.trim() || data.ten_community_members || 'Unknown',
-      avtURL: data.avatar_url && data.avatar_url !== 'string' ? data.avatar_url : 'https://i.pravatar.cc/300',
+      avtURL: data.avatar_url && data.avatar_url !== 'string' ? data.avatar_url : 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg',
       createdAt: data.created_at || '',
       location: data.location || 'Chưa cập nhật',
       headline: data.description || 'Headline không có sẵn',
