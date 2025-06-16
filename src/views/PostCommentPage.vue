@@ -93,86 +93,86 @@ export default {
       comments: [],
       newComment: '',
       // Mock data
-      mockPosts: {
-        // Post data
-        1: {
-          id: 1,
-          title: "Tran Nguyen Gia Huy 221403 find a lover for rest of life",
-          reward: { type: 'points', value: 100 },
-          dueDate: '2024-06-30T23:59:59',
-          status: 'pending',
-          joined: true
-        },
-        2: {
-          id: 2,
-          title: "Thien An writes an open letter to Jack and their daughter Sol.",
-          reward: { type: 'points', value: 50 },
-          dueDate: '2024-06-15T18:00:00',
-          status: 'done',
-          joined: false
-        },
-        3: {
-          id: 2,
-          title: "Ronaldo nets his 937th career goal.",
-          reward: { type: 'points', value: 50 },
-          dueDate: '2024-06-15T18:00:00',
-          status: 'done',
-          joined: false
-        },
+      // Mock data
+mockPosts: {
+  1: {
+    id: 1,
+    title: "Tran Nguyen Gia Huy 221403 find a lover for rest of life",
+    reward: { type: 'points', value: 100 },
+    dueDate: '2024-06-30T23:59:59',
+    status: 'pending',
+    joined: true
+  },
+  2: {
+    id: 2,
+    title: "Thien An writes an open letter to Jack and their daughter Sol.",
+    reward: { type: 'points', value: 50 },
+    dueDate: '2024-06-15T18:00:00',
+    status: 'done',
+    joined: false
+  },
+  3: {
+    id: 3,
+    title: "Ronaldo nets his 937th career goal.",
+    reward: { type: 'points', value: 50 },
+    dueDate: '2024-06-15T18:00:00',
+    status: 'done',
+    joined: false
+  },
+  4: {
+    id: 4,
+    title: "Event at Ho Chi Minh City",
+    reward: { type: 'voucher' },
+    dueDate: '2024-06-15T18:00:00',
+    status: 'done',
+    joined: false
+  },
+  5: {
+    id: 5,
+    title: "Vietnam Sport Show 2025",
+    reward: { type: 'voucher' },
+    dueDate: '2024-06-15T18:00:00',
+    status: 'done',
+    joined: false
+  },
+  6: {
+    id: 6,
+    title: "GrowthVerse Summit 2025",
+    reward: { type: 'voucher' },
+    dueDate: '2024-06-15T18:00:00',
+    status: 'done',
+    joined: false
+  }
+},
 
-        // event data
-        4: {
-          id: 2,
-          title: "Event at Ho Chi Minh City",
-          reward: { type: 'voucher'},
-          dueDate: '2024-06-15T18:00:00',
-          status: 'done',
-          joined: false
-        },
-        5: {
-          id: 2,
-          title: "Vietnam Sport Show 2025",
-          reward: { type: 'voucher'},
-          dueDate: '2024-06-15T18:00:00',
-          status: 'done',
-          joined: false
-        },
-        6: {
-          id: 2,
-          title: "GrowthVerse Summit 2025",
-          reward: { type: 'voucher'},
-          dueDate: '2024-06-15T18:00:00',
-          status: 'done',
-          joined: false
-        }
-      },
-      mockComments: {
-        1: [
-          {
-            id: 1,
-            author: "Jame",
-            avatar: "https://i.pravatar.cc/150?img=1",
-            text: "This event was so fun, I joined!",
-            time: "2024-05-20T10:30:00"
-          },
-          {
-            id: 2,
-            author: "July",
-            avatar: "https://i.pravatar.cc/150?img=2",
-            text: "When will the results be available, everyone?",
-            time: "2024-05-20T11:45:00"
-          }
-        ],
-        2: [
-          {
-            id: 3,
-            author: "Adam",
-            avatar: "https://i.pravatar.cc/150?img=3",
-            text: "This challenge is so easy!",
-            time: "2024-05-18T09:15:00"
-          }
-        ]
-      }
+mockComments: {
+  1: [
+    {
+      id: 1,
+      author: "Jame",
+      avatar: "https://i.pravatar.cc/150?img=1",
+      text: "This event was so fun, I joined!",
+      time: "2024-05-20T10:30:00"
+    },
+    {
+      id: 2,
+      author: "July",
+      avatar: "https://i.pravatar.cc/150?img=2",
+      text: "When will the results be available, everyone?",
+      time: "2024-05-20T11:45:00"
+    }
+  ],
+  2: [
+    {
+      id: 3,
+      author: "Adam",
+      avatar: "https://i.pravatar.cc/150?img=3",
+      text: "This challenge is so easy!",
+      time: "2024-05-18T09:15:00"
+    }
+  ]
+}
+
     }
   },
   created() {
