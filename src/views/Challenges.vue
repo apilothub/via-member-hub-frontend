@@ -4,36 +4,50 @@
     <h3 class="text-lg font-semibold mb-4 text-gray-700">Let’s comment on posts to level up</h3>
 
     <div class="post-list mb-10">
-      <p v-if="isLoadingComments" class="text-gray-500">Loading comment challenges...</p>
-      <p v-else-if="commentError" class="text-red-500">{{ commentError }}</p>
+      <!-- Loading: hiện nhiều skeleton -->
+      <template v-if="isLoadingComments">
+        <PostItem v-for="n in 3" :key="'skeleton-comment-' + n" :loading="true" />
+      </template>
+
+      <!-- Error -->
+      <p v-else-if="commentError" class="text-red-500">An error has occurred. Please try again later.</p>
+
+      <!-- Dữ liệu -->
       <PostItem
         v-else
-        v-for="(post, index) in commentChallenges"
-        :key="post.id || index"
-        :post="mapCommentToPost(post)"
+        v-for="(challenge, index) in commentChallenges"
+        :key="challenge.id || index"
+        :post="challenge"
       />
     </div>
 
     <h3 class="text-lg font-semibold mb-4 text-gray-700">Join exciting events to gain experience</h3>
+
     <div class="event-list space-y-4">
-      <EventItem
-        v-if="isLoadingEvents"
-        title="Loading..."
-        :reward="{ type: 'points', value: 200 }"
-        :loading="true"
-      />
-      <p v-else-if="eventError" class="text-red-500">{{ eventError }}</p>
+      <!-- Loading: nhiều skeleton -->
+      <template v-if="isLoadingEvents">
+        <EventItem v-for="n in 2" :key="'skeleton-event-' + n" :loading="true" />
+      </template>
+
+      <!-- Error -->
+      <p v-else-if="eventError" class="text-red-500">An error has occurred. Please try again later.</p>
+
+      <!-- Dữ liệu -->
       <EventItem
         v-else
-        v-for="(event, index) in events"
-        :key="event.event_id || index"
-        :title="event.ten_events"
-        :reward="{ type: 'points', value: 100 }"
-        :dueDate="event.ends_at"
-        :joined="event.current_attendees > 0"
+        v-for="(eventChallenge, index) in eventChallenges"
+        :key="eventChallenge.post_challenge_id || index"
+        :title="eventChallenge.event?.ten_events"
+        :reward="{
+          type: 'points',
+          value: eventChallenge.points_reward,
+          highlight: eventChallenge.event?.current_attendees > 0 || eventChallenge.event?.status === 'done'
+        }"
+        :dueDate="eventChallenge.event?.ends_at"
+        :joined="eventChallenge.event?.current_attendees > 0"
         :ticketPurchased="false"
-        :location="event.in_persion_location"
-        :postId="event.post_id || index + 1"
+        :location="eventChallenge.event?.in_person_location"
+        :postId="eventChallenge.event?.event_id || index + 1"
       />
     </div>
   </div>
@@ -41,66 +55,74 @@
 
 <script>
 import { defineAsyncComponent } from 'vue';
-import { fetchCommentChallenges, fetchEvents } from '../services/challengeService';
+import { fetchCommentChallenges, fetchEventChallenges } from '../services/apiService';
 
 export default {
   name: 'Challenges',
   components: {
-    // Tải lười (lazy load)
-    PostItem: defineAsyncComponent(() => import('../components/PostItem.vue')),
-    EventItem: defineAsyncComponent(() => import('../components/EventItem.vue')),
+    PostItem: defineAsyncComponent(() => import('../components/Post_Challenge.vue')),
+    EventItem: defineAsyncComponent(() => import('../components/Event_Challenge.vue')),
   },
   data() {
     return {
-      events: [],
       commentChallenges: [],
-      isLoadingEvents: true,
+      eventChallenges: [],
       isLoadingComments: true,
-      eventError: null,
+      isLoadingEvents: true,
       commentError: null,
+      eventError: null,
     };
   },
   created() {
-    this.loadCommentChallenges();
-    this.loadEvents();
+    this.loadAllChallenges();
   },
   methods: {
-    async loadCommentChallenges() {
+    async loadAllChallenges() {
       this.isLoadingComments = true;
-      try {
-        const res = await fetchCommentChallenges();
-        this.commentChallenges = res;
-      } catch (err) {
-        this.commentError = err?.message || 'Failed to load comment challenges';
-      } finally {
-        this.isLoadingComments = false;
-      }
-    },
-    async loadEvents() {
       this.isLoadingEvents = true;
       try {
-        const res = await fetchEvents();
-        this.events = res;
+        const [commentRes, eventRes] = await Promise.all([
+          fetchCommentChallenges(),
+          fetchEventChallenges()
+        ]);
+
+        const mappedComments = commentRes.map(challenge => this.mapCommentToPost(challenge))
+          .sort((a, b) => (a.joined === b.joined ? 0 : a.joined ? 1 : -1));
+
+        this.commentChallenges = mappedComments;
+        this.eventChallenges = eventRes;
       } catch (err) {
-        this.eventError = err?.message || 'Failed to load events';
+        this.commentError = true;
+        this.eventError = true;
       } finally {
+        this.isLoadingComments = false;
         this.isLoadingEvents = false;
       }
     },
-    mapCommentToPost(post) {
+
+    mapCommentToPost(challenge) {
+      const post = challenge.post;
       return {
-        id: post.post_id,
-        title: `Comment Challenge #${post.id}`,
-        author: 'Community',
-        reward: { type: 'points', value: post.points_reward },
+        id: challenge.post_challenge_id,
+        title: post.ten_posts || `Comment Challenge #${challenge.post_challenge_id}`,
+        author: post.user_name || 'Unknown',
+        reward: {
+          type: 'points',
+          value: challenge.points_reward,
+          highlight: post.comments_count > 0
+        },
         createdAt: post.created_at,
-        excerpt: 'You need to comment on this post to complete the challenge.',
-        joined: true,
+        joined: post.comments_count > 0,
         requiresComment: true,
-        commented: false,
-        tags: ['commenting'],
+        commented: post.comments_count > 0,
+        url: post.url,
+        avatar: post.user_avatar_url,
+        tags: post.tags || [],
+        excerpt: post.body?.replace(/<[^>]*>/g, '').slice(0, 150) || '',
+        status: post.comments_count > 0 ? 'done' : '',
+        dueDate: challenge.due_date
       };
-    },
-  },
+    }
+  }
 };
 </script>

@@ -12,7 +12,7 @@
 <script>
 import ComHeader from './components/ComHeader.vue';
 import ComFooter from './components/ComFooter.vue';
-import EventItem from './components/EventItem.vue'; 
+import EventItem from './components/Event_Challenge.vue'; 
 
 export default {
   name: 'App',

@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import EventItem from '../components/EventItem.vue'
+import EventItem from '../components/Event_Challenge.vue'
 
 export default {
   name: 'PostComment',
