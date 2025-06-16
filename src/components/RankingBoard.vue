@@ -36,7 +36,7 @@
                   <div
                     class="rounded-full w-8 sm:w-9 h-8 sm:h-9 flex items-center justify-center mx-auto text-sm font-bold text-gray-900"
                   >
-                    {{ index + 1 }}
+                  {{ user.ranking }}
                   </div>
                 </td>
                 <td class="border border-gray-200 p-3 sm:p-4 relative">
@@ -161,9 +161,16 @@ const handleImageError = (event) => {
   event.target.src = 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg';
 };
 
-const sortedRankingData = computed(() =>
-  [...rankingData.value].sort((a, b) => b.points - a.points)
-);
+const sortedRankingData = computed(() => {
+  // Sắp xếp theo điểm từ cao xuống thấp
+  const sorted = [...rankingData.value].sort((a, b) => b.points - a.points);
+  
+  // Thêm thứ hạng cho mỗi user
+  return sorted.map((user, index) => ({
+    ...user,
+    ranking: index + 1
+  }));
+});
 
 const currentUser = computed(() =>
   sortedRankingData.value.find(user => user.memberID === currentUserID) || null
