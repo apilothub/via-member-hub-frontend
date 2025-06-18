@@ -36,13 +36,14 @@
                   <div
                     class="rounded-full w-8 sm:w-9 h-8 sm:h-9 flex items-center justify-center mx-auto text-sm font-bold text-gray-900"
                   >
-                    {{ index + 1 }}
+                  {{ user.ranking }}
                   </div>
                 </td>
                 <td class="border border-gray-200 p-3 sm:p-4 relative">
                   <img
                     :src="user.avtURL"
                     alt="avatar"
+                    @error="handleImageError"
                     :class="[
                       'w-10 sm:w-12 lg:w-14 h-10 sm:h-12 lg:h-14 rounded-full mx-auto shadow-md transition-transform duration-200 hover:scale-110',
                       user.memberID === currentUser?.memberID
@@ -142,7 +143,7 @@ onMounted(async () => {
       rankingData.value = result.data.map(user => ({
         memberID: user.community_member_id,
         name: user.ten_community_members || `${user.first_name} ${user.last_name}`.trim(),
-        avtURL: user.avatar_url && user.avatar_url !== 'string' ? user.avatar_url : 'https://i.pravatar.cc/300',
+        avtURL: user.avatar_url && user.avatar_url !== 'string' ? user.avatar_url : 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg',
         level: parseInt(user.current_level_name.replace('Level ', '')) || 1,
         points: user.total_points,
         pointsToNextLevel: user.points_to_next_level
@@ -156,10 +157,20 @@ onMounted(async () => {
   }
 });
 
+const handleImageError = (event) => {
+  event.target.src = 'https://thumbs.dreamstime.com/b/default-profile-picture-avatar-photo-placeholder-vector-illustration-default-profile-picture-avatar-photo-placeholder-vector-189495158.jpg';
+};
 
-const sortedRankingData = computed(() =>
-  [...rankingData.value].sort((a, b) => b.points - a.points)
-);
+const sortedRankingData = computed(() => {
+  // Sắp xếp theo điểm từ cao xuống thấp
+  const sorted = [...rankingData.value].sort((a, b) => b.points - a.points);
+  
+  // Thêm thứ hạng cho mỗi user
+  return sorted.map((user, index) => ({
+    ...user,
+    ranking: index + 1
+  }));
+});
 
 const currentUser = computed(() =>
   sortedRankingData.value.find(user => user.memberID === currentUserID) || null
