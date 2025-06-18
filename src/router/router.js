@@ -4,10 +4,7 @@ import ComEventDetail from '../views/EventDetail.vue';
 import NotFound from '../views/404.vue';
 import Challenges from '../views/Challenges.vue';
 import AboutPage from '../views/About.vue';
-
-// import Posts from '../views/Posts.vue'
-//http://localhost:8080/test-event dùng để test eventitem
-//http://localhost:8080/post/1/comment dùng để test post comment
+import Posts from '../views/CommentPage.vue';
 
 const routes = [
   {
@@ -37,12 +34,12 @@ const routes = [
     component: AboutPage,
 
   },
+  {
+    path: '/comment/:postId',
+    name: 'CommentPage',
+    component: Posts,
+  },
 
-  // {
-  //   path: '/posts',
-  //   name: 'Posts',
-  //   component: Posts
-  // },
 ];
 
 const router = createRouter({

@@ -23,13 +23,16 @@
 
     <!-- Back Button -->
     <div class="mt-4">
-      <button
-        @click="$router.push('/')"
-        class="w-full sm:w-auto flex justify-center sm:inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-300"
-      >
-        <font-awesome-icon icon="arrow-left" />
-        Back
-      </button>
+     <button
+  @click="$router.push('/')"
+  class="w-full sm:w-auto flex justify-center sm:inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3
+         text-sm sm:text-base bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors duration-300"
+>
+  <font-awesome-icon icon="arrow-left" />
+  Back
+</button>
+
+
     </div>
   </div>
 
